@@ -5,7 +5,6 @@
 
 class VK_Instance {
     VkInstance instance_handle;
-
     const bool enable_validation_layers = true;
     VK_ValidationLayers* validation_layers= nullptr;
 public:
@@ -13,5 +12,7 @@ public:
 
     ~VK_Instance();
 
-    bool checkExtensionsSupport(const char **extensions_name, uint32_t count);
+    void getRequiredExtensions( std::vector<const char*>& extensions);
+    bool checkExtensionsSupport(std::vector<const char*>& required_entension_names);
+
 };

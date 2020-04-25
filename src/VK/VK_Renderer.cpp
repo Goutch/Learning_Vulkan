@@ -18,15 +18,11 @@ GLFWwindow *VK_Renderer::createWindow(unsigned int width, unsigned int height, c
 }
 
 void VK_Renderer::init() {
-
-
-
     if(!glfwVulkanSupported())
     {
         Log::error("Vulkan is not supported");
     }
     instance=new VK_Instance("Vulkan");
-    Log::status("Vulkan initialized");
 }
 
 
