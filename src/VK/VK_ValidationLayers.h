@@ -1,7 +1,7 @@
 #include "vector"
 #include "vulkan/vulkan.h"
 class VK_ValidationLayers {
-    const VkInstance* vk_instance;
+    const VkInstance* vk_instance_handle;
     VkDebugUtilsMessengerCreateInfoEXT create_info{};
     VkDebugUtilsMessengerEXT debug_messenger;
 
@@ -13,7 +13,7 @@ public:
     VK_ValidationLayers();
 
     ~VK_ValidationLayers();
-    void init(const VkInstance& vk_instance);
+    void init(const VkInstance& vk_instance_handle);
     const VkDebugUtilsMessengerCreateInfoEXT& getCreateInfo();
     const char** getValidationLayersNames();
     uint32_t getCount();

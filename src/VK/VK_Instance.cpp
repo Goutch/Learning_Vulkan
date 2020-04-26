@@ -41,7 +41,7 @@ VK_Instance::VK_Instance(const char *app_name) {
             create_info.enabledLayerCount=0;
             create_info.pNext= nullptr;
         }
-        if (vkCreateInstance(&create_info, nullptr, &instance_handle) != VK_SUCCESS) {
+        if (vkCreateInstance(&create_info, nullptr, &handle) != VK_SUCCESS) {
             Log::error("vkCreateInstance() failed.");
         }
 
@@ -50,9 +50,12 @@ VK_Instance::VK_Instance(const char *app_name) {
     }
     if(enable_validation_layers)
     {
-        validation_layers->init(instance_handle);
+        validation_layers->init(handle);
     }
     Log::status("Vulkan instance initialized");
+
+    physical_device=new VK_PhysicalDevice(handle);
+    device=new VK_Device(*physical_device);
 }
 void VK_Instance::getRequiredExtensions(std::vector<const char *>& extensions) {
     uint32_t glfw_extension_count = 0;
@@ -96,10 +99,14 @@ bool VK_Instance::checkExtensionsSupport(std::vector<const char *>& required_ext
 
 
 VK_Instance::~VK_Instance() {
-    if(enable_validation_layers)delete validation_layers;
-    vkDestroyInstance(instance_handle, nullptr);
+    if(device)delete device;
+    if(physical_device)delete physical_device;
+    if(enable_validation_layers&&validation_layers)delete validation_layers;
+    vkDestroyInstance(handle, nullptr);
     Log::status("Vulkan instance terminated");
 }
+
+
 
 
 

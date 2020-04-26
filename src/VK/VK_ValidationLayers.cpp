@@ -54,9 +54,9 @@ VK_ValidationLayers::VK_ValidationLayers() {
     create_info.pUserData= nullptr;
 
 }
-void VK_ValidationLayers::init(VkInstance const &vk_instance) {
-    this->vk_instance=&vk_instance;
-    if(createDebugUtilsMessengerEXT(*this->vk_instance,&create_info, nullptr,&debug_messenger)!=VK_SUCCESS)
+void VK_ValidationLayers::init(const VkInstance &vk_instance_handle) {
+    this->vk_instance_handle=&vk_instance_handle;
+    if(createDebugUtilsMessengerEXT(*this->vk_instance_handle, &create_info, nullptr, &debug_messenger) != VK_SUCCESS)
     {
         Log::error("Failed to set up debug messenger!");
     }
@@ -97,7 +97,7 @@ uint32_t VK_ValidationLayers::getCount() {
 }
 
 VK_ValidationLayers::~VK_ValidationLayers() {
-   if(debug_messenger)destroyDebugUtilsMessengerEXT(*vk_instance,debug_messenger, nullptr);
+   if(debug_messenger)destroyDebugUtilsMessengerEXT(*vk_instance_handle, debug_messenger, nullptr);
 }
 
 const VkDebugUtilsMessengerCreateInfoEXT &VK_ValidationLayers::getCreateInfo() {
