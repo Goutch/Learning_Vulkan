@@ -11,10 +11,21 @@
 #include "Log.h"
 #include<string.h>
 
-VK_Instance::VK_Instance(const char *app_name) {
+VK_Instance::VK_Instance(GLFWwindow* window) {
+    this->window_handle=window;
+    createInstance();
+    createSurface();
+    physical_device=new VK_PhysicalDevice(handle,surface_handle);
+    device=new VK_Device(*physical_device);
+    swapchain=new VK_Swapchain(handle,surface_handle);
+    Log::status("Vulkan instance initialized");
+}
+
+
+void VK_Instance::createInstance() {
     VkApplicationInfo app_info{};
     app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-    app_info.pApplicationName = app_name;
+    app_info.pApplicationName = "ApplicationNamePlaceHolder";
     app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
     app_info.pEngineName = "EngineNamePlaceHodler";
     app_info.engineVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -31,7 +42,7 @@ VK_Instance::VK_Instance(const char *app_name) {
     create_info.enabledLayerCount = 0;
 
     if (checkExtensionsSupport(required_extensions)) {
-        if(enable_validation_layers)
+        if(ENABLE_VALIDATION_LAYERS)
         {
             validation_layers=new VK_ValidationLayers();
             create_info.enabledLayerCount=validation_layers->getCount();
@@ -48,14 +59,17 @@ VK_Instance::VK_Instance(const char *app_name) {
     } else {
         Log::error("Missing extensions to create vulkan instance");
     }
-    if(enable_validation_layers)
+    if(ENABLE_VALIDATION_LAYERS)
     {
         validation_layers->init(handle);
     }
-    Log::status("Vulkan instance initialized");
+}
 
-    physical_device=new VK_PhysicalDevice(handle);
-    device=new VK_Device(*physical_device);
+void VK_Instance::createSurface() {
+    if(glfwCreateWindowSurface(handle,window_handle, nullptr,&surface_handle)!=VK_SUCCESS)
+    {
+        Log::error("Failed to create window surface");
+    }
 }
 void VK_Instance::getRequiredExtensions(std::vector<const char *>& extensions) {
     uint32_t glfw_extension_count = 0;
@@ -64,7 +78,7 @@ void VK_Instance::getRequiredExtensions(std::vector<const char *>& extensions) {
     for (int i = 0; i <glfw_extension_count ; ++i) {
         extensions.push_back(glfw_extensions[i]);
     }
-    if(enable_validation_layers)
+    if(ENABLE_VALIDATION_LAYERS)
     {
         extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
     }
@@ -99,12 +113,16 @@ bool VK_Instance::checkExtensionsSupport(std::vector<const char *>& required_ext
 
 
 VK_Instance::~VK_Instance() {
-    if(device)delete device;
-    if(physical_device)delete physical_device;
-    if(enable_validation_layers&&validation_layers)delete validation_layers;
+    delete swapchain;
+    delete device;
+    delete physical_device;
+    delete swapchain;
+    vkDestroySurfaceKHR(handle,surface_handle, nullptr);
+    delete validation_layers;
     vkDestroyInstance(handle, nullptr);
     Log::status("Vulkan instance terminated");
 }
+
 
 
 

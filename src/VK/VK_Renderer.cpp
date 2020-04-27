@@ -12,17 +12,21 @@ GLFWwindow *VK_Renderer::createWindow(unsigned int width, unsigned int height, c
     }
     glfwWindowHint(GLFW_CLIENT_API,GLFW_NO_API);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_VISIBLE,GLFW_FALSE);
     window = glfwCreateWindow(width,height,title,nullptr,nullptr);
-    Log::status("Window opened");
     return window;
 }
 
 void VK_Renderer::init() {
+    if(!window||!glfwInit())Log::error("Create window before initializing renderer");
     if(!glfwVulkanSupported())
     {
         Log::error("Vulkan is not supported");
     }
-    instance=new VK_Instance("Vulkan");
+    instance=new VK_Instance(window);
+    glfwShowWindow(window);
+    Log::status("Window opened");
+
 }
 
 

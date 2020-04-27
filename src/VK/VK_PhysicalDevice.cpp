@@ -6,8 +6,9 @@
 #include "VK_PhysicalDevice.h"
 #include "Log.h"
 #include "map"
-VK_PhysicalDevice::VK_PhysicalDevice(const VkInstance& vk_instance_handle) {
+VK_PhysicalDevice::VK_PhysicalDevice(const VkInstance& vk_instance_handle,VkSurfaceKHR &surface_handle) {
     this->vk_instance_handle=&vk_instance_handle;
+    this->surface_handle=&surface_handle;
     Log::status("Looking for suitable GPU...");
     pickBestPhysicalDevice();
 }
@@ -70,12 +71,19 @@ QueueFamilyIndices VK_PhysicalDevice::getSupportedQueueFamilies(VkPhysicalDevice
     std::vector<VkQueueFamilyProperties> supported_queue_families(queue_family_count);
     vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &queue_family_count, supported_queue_families.data());
 
-    for (int i=0;i<queue_family_count;++i) {
+
+    for (uint32_t i=0;i<queue_family_count;++i) {
+        //graphics
         if(supported_queue_families.at(i).queueFlags&VK_QUEUE_GRAPHICS_BIT)
         {
             indices.graphics_family=i;
-            indices.has_graphics_family=true;
         }
+        //present
+        VkBool32 present_supported=false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(physical_device,i,*surface_handle,&present_supported);
+        if(present_supported)indices.present_family=i;
+
+        //complete?
         if(indices.isComplete())break;
     }
 
@@ -84,6 +92,14 @@ QueueFamilyIndices VK_PhysicalDevice::getSupportedQueueFamilies(VkPhysicalDevice
 
 const VkPhysicalDevice &VK_PhysicalDevice::getHandle() const {
     return handle;
+}
+
+const VkPhysicalDeviceFeatures &VK_PhysicalDevice::getFeatures() const {
+    return features;
+}
+
+const VkPhysicalDeviceProperties &VK_PhysicalDevice::getProperties() const {
+    return properties;
 }
 
 

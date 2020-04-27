@@ -1,26 +1,39 @@
 #pragma once
+
 #include "vulkan/vulkan.h"
-struct QueueFamilyIndices{
-    bool has_graphics_family=false;
-    uint32_t graphics_family;
-    bool isComplete(){
-        return has_graphics_family;
+#include "optional"
+
+struct QueueFamilyIndices {
+    std::optional<uint32_t> graphics_family;
+    std::optional<uint32_t> present_family;
+
+    bool isComplete() {
+        return graphics_family.has_value() && present_family.has_value();
     }
 };
+
 class VK_PhysicalDevice {
-    const VkInstance* vk_instance_handle;
-    VkPhysicalDevice handle=VK_NULL_HANDLE;
+    const VkInstance *vk_instance_handle;
+    VkSurfaceKHR* surface_handle;
+    VkPhysicalDevice handle = VK_NULL_HANDLE;
     VkPhysicalDeviceProperties properties;
     VkPhysicalDeviceFeatures features;
     QueueFamilyIndices queue_family_indices{};
 public:
-    VK_PhysicalDevice( const VkInstance &vk_instance_handle);
-    const QueueFamilyIndices& getQueueFamilyIndices() const;
-    const VkPhysicalDevice& getHandle()const;
+    VK_PhysicalDevice(const VkInstance &vk_instance_handle, VkSurfaceKHR &surface_handle);
+
+    const QueueFamilyIndices &getQueueFamilyIndices() const;
+
+    const VkPhysicalDevice &getHandle() const;
+    const VkPhysicalDeviceFeatures& getFeatures() const;
+    const VkPhysicalDeviceProperties& getProperties() const;
 private:
     void pickBestPhysicalDevice();
-    static QueueFamilyIndices getSupportedQueueFamilies(const VkPhysicalDevice& physical_device);
-    static bool isDeviceSuitable(const VkPhysicalDevice& physical_device);
-    static int getScore(const VkPhysicalDevice& physical_device);
+
+    QueueFamilyIndices getSupportedQueueFamilies(const VkPhysicalDevice &physical_device);
+
+    bool isDeviceSuitable(const VkPhysicalDevice &physical_device);
+
+    int getScore(const VkPhysicalDevice &physical_device);
 
 };
