@@ -10,6 +10,7 @@ class VK_Device {
     VkQueue present_queue;
 public:
     VK_Device(const VK_PhysicalDevice& physical_device);
+    VkDevice& getHandle();
     ~VK_Device();
 };
 

@@ -29,7 +29,9 @@ VK_Device::VK_Device(const VK_PhysicalDevice& physical_device) {
     device_create_info.pQueueCreateInfos=queue_create_infos.data();
     VkPhysicalDeviceFeatures device_features{};
     device_create_info.pEnabledFeatures=&device_features;
-    device_create_info.enabledExtensionCount = 0;
+    auto& enabled_extensions=physical_device.getRequiredExtensions();
+    device_create_info.enabledExtensionCount = enabled_extensions.size();
+    device_create_info.ppEnabledExtensionNames=enabled_extensions.data();
 
     if(vkCreateDevice(physical_device.getHandle(),&device_create_info, nullptr,&handle)!=VK_SUCCESS)
     {
@@ -42,6 +44,10 @@ VK_Device::VK_Device(const VK_PhysicalDevice& physical_device) {
 VK_Device::~VK_Device()
 {
     vkDestroyDevice(handle, nullptr);
+}
+
+VkDevice &VK_Device::getHandle() {
+    return handle;
 }
 
 

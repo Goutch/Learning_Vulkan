@@ -31,7 +31,7 @@ void Log::status(const std::string &s) {
 }
 void Log::_error(const std::string &s, unsigned int line, std::string file, std::string function) {
     if (Log::log_level >= ERROR) {
-        std::cerr<<"[ERROR]file :"+file+" at "+std::to_string(line)+":\n"+s<<std::endl;
+        std::cerr<<"[ERROR]"+s+"\nfile :"+file+" at "+std::to_string(line)<<std::endl;
         throw std::runtime_error("error") ;
     }
 }

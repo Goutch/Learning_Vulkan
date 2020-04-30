@@ -19,6 +19,7 @@ GLFWwindow *VK_Renderer::createWindow(unsigned int width, unsigned int height, c
 
 void VK_Renderer::init() {
     if(!window||!glfwInit())Log::error("Create window before initializing renderer");
+
     if(!glfwVulkanSupported())
     {
         Log::error("Vulkan is not supported");
