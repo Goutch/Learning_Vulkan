@@ -9,9 +9,6 @@
 #include <cstring>
 
 
-VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR> &availableFormats) {
-
-}
 
 VK_PhysicalDevice::VK_PhysicalDevice(const VkInstance &vk_instance_handle, VkSurfaceKHR &surface_handle) {
     this->vk_instance_handle = &vk_instance_handle;

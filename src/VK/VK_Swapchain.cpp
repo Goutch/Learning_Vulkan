@@ -4,7 +4,7 @@
 
 #include "VK_Swapchain.h"
 #include "Log.h"
-
+#include <algorithm>
 #include <cstdint>
 
 VK_Swapchain::VK_Swapchain(uint32_t width,
