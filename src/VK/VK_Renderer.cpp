@@ -30,9 +30,6 @@ void VK_Renderer::init() {
 
 }
 
-
-
-
 void VK_Renderer::render() {
 
 }
