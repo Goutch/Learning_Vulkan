@@ -135,6 +135,18 @@ void VK_Swapchain::createImageViews() {
     }
 }
 
+VkExtent2D VK_Swapchain::getExtent() {
+    return extent;
+}
+
+VkSwapchainKHR &VK_Swapchain::getHandle() {
+    return handle;
+}
+
+VkFormat VK_Swapchain::getFormat() {
+    return format;
+}
+
 
 
 

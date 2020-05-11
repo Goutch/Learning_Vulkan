@@ -44,6 +44,7 @@ VK_Device::VK_Device(const VK_PhysicalDevice& physical_device) {
 VK_Device::~VK_Device()
 {
     vkDestroyDevice(handle, nullptr);
+    Log::status("Destroyed device");
 }
 
 VkDevice &VK_Device::getHandle() {

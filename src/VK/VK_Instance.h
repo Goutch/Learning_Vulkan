@@ -5,17 +5,21 @@
 #include "VK_PhysicalDevice.h"
 #include "VK_Device.h"
 #include "VK_Swapchain.h"
+#include "VK_GraphicPipeline.h"
+#include "VK_RenderPass.h"
 
 class VK_Instance {
     const bool ENABLE_VALIDATION_LAYERS = true;
 
     VkInstance handle;
-    VkSurfaceKHR surface_handle= nullptr;
+    VkSurfaceKHR surface_handle;
     GLFWwindow* window_handle= nullptr;
     VK_ValidationLayers* validation_layers= nullptr;
     VK_PhysicalDevice* physical_device= nullptr;
     VK_Device* device=nullptr;
     VK_Swapchain* swapchain=nullptr;
+    VK_RenderPass* renderPass=nullptr;
+    VK_GraphicPipeline* pipeline=nullptr;
 public:
     VK_Instance(GLFWwindow* window);
     ~VK_Instance();

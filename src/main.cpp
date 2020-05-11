@@ -1,3 +1,4 @@
+#include "Log.h"
 #include "VK/VK_Renderer.h"
 GLFWwindow* window;
 void init(){
@@ -17,13 +18,13 @@ void loop(){
         glfwSwapBuffers(window);
         VK_Renderer::swapBuffers();
     }
+    Log::status("Window closed");
 }
 
 void cleanup(){
     VK_Renderer::terminate();
 }
 int main() {
-
     init();
     loop();
     cleanup();

@@ -30,5 +30,8 @@ public:
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& available_present_modes);
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
     void createImageViews();
+    VkSwapchainKHR& getHandle();
+    VkExtent2D getExtent();
+    VkFormat getFormat();
 
 };

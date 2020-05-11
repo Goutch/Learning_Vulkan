@@ -25,6 +25,8 @@ VK_Instance::VK_Instance(GLFWwindow *window) {
                                  surface_handle,
                                  *physical_device,
                                  *device);
+    renderPass=new VK_RenderPass(*device,*swapchain);
+    pipeline=new VK_GraphicPipeline("../res/shader/shader_vert.spv","../res/shader/shader_frag.spv",device->getHandle(),*swapchain);
     Log::status("Vulkan instance initialized");
 }
 
@@ -116,6 +118,8 @@ bool VK_Instance::checkExtensionsSupport(std::vector<const char *> &required_ext
 
 
 VK_Instance::~VK_Instance() {
+    delete pipeline;
+    delete renderPass;
     delete swapchain;
     delete device;
     delete physical_device;

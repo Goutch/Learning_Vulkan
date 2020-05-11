@@ -29,5 +29,12 @@ add_executable (${PROJECT_NAME}
         src/VK/VK_Device.cpp
         src/VK/VK_Device.h
         src/VK/VK_Swapchain.cpp
-        src/VK/VK_Swapchain.h src/VK/VK_Shader.cpp src/VK/VK_Shader.h src/VK/VK_GraphicPipeline.cpp src/VK/VK_GraphicPipeline.h)
+        src/VK/VK_Swapchain.h
+        src/VK/VK_Shader.cpp
+        src/VK/VK_Shader.h
+        src/VK/VK_GraphicPipeline.cpp
+        src/VK/VK_GraphicPipeline.h
+        src/VK/VK_RenderPass.cpp
+        src/VK/VK_RenderPass.h)
+
 target_link_libraries(${PROJECT_NAME} glfw ${Vulkan_LIBRARY})
