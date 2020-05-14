@@ -35,6 +35,6 @@ add_executable (${PROJECT_NAME}
         src/VK/VK_GraphicPipeline.cpp
         src/VK/VK_GraphicPipeline.h
         src/VK/VK_RenderPass.cpp
-        src/VK/VK_RenderPass.h)
+        src/VK/VK_RenderPass.h src/VK/VK_CommandPool.cpp src/VK/VK_CommandPool.h)
 
 target_link_libraries(${PROJECT_NAME} glfw ${Vulkan_LIBRARY})

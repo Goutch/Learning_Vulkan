@@ -6,11 +6,14 @@
 
 class VK_Device {
     VkDevice handle;
+
     VkQueue graphics_queue;
     VkQueue present_queue;
+    VK_PhysicalDevice* physical_device;
 public:
-    VK_Device(const VK_PhysicalDevice& physical_device);
+    VK_Device(VK_PhysicalDevice& physical_device);
     VkDevice& getHandle();
+    VK_PhysicalDevice& getPhysicalDevice();
     ~VK_Device();
 };
 

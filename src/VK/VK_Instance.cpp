@@ -25,8 +25,11 @@ VK_Instance::VK_Instance(GLFWwindow *window) {
                                  surface_handle,
                                  *physical_device,
                                  *device);
-    renderPass=new VK_RenderPass(*device,*swapchain);
-    pipeline=new VK_GraphicPipeline("../res/shader/shader_vert.spv","../res/shader/shader_frag.spv",device->getHandle(),*swapchain);
+    renderPass = new VK_RenderPass(*device, *swapchain);
+    pipeline = new VK_GraphicPipeline("../res/shader/shader_vert.spv",
+                                      "../res/shader/shader_frag.spv",
+                                      *device, *swapchain, *renderPass);
+    swapchain->createFramebuffers(*renderPass);
     Log::status("Vulkan instance initialized");
 }
 

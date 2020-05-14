@@ -4,7 +4,6 @@ GLFWwindow* window;
 void init(){
     window=VK_Renderer::createWindow(900,600,"VULKAN");
     VK_Renderer::init();
-
 }
 
 void loop(){

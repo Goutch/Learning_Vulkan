@@ -37,7 +37,7 @@ VK_RenderPass::VK_RenderPass(VK_Device& device,VK_Swapchain& swapchain) {
     render_pass_create_info.subpassCount=1;
     render_pass_create_info.pSubpasses=&subpass;
 
-    if(vkCreateRenderPass(device.getHandle(),&render_pass_create_info, nullptr,&renderPass)){
+    if(vkCreateRenderPass(device.getHandle(),&render_pass_create_info, nullptr,&handle)){
         Log::error("Failed to create render pass!");
     }
     Log::status("Created render pass");
@@ -46,6 +46,10 @@ VK_RenderPass::VK_RenderPass(VK_Device& device,VK_Swapchain& swapchain) {
 }
 
 VK_RenderPass::~VK_RenderPass() {
-    vkDestroyRenderPass(device->getHandle(),renderPass, nullptr);
+    vkDestroyRenderPass(device->getHandle(), handle, nullptr);
     Log::status("Destroyed render pass");
+}
+
+VkRenderPass VK_RenderPass::getHandle() {
+    return handle;
 }

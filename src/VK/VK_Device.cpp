@@ -6,7 +6,9 @@
 #include "Log.h"
 #include "vector"
 #include "set"
-VK_Device::VK_Device(const VK_PhysicalDevice& physical_device) {
+
+VK_Device::VK_Device( VK_PhysicalDevice& physical_device) {
+    this->physical_device=&physical_device;
     QueueFamilyIndices indices=physical_device.getQueueFamilyIndices();
 
     std::vector<VkDeviceQueueCreateInfo> queue_create_infos;
@@ -49,6 +51,10 @@ VK_Device::~VK_Device()
 
 VkDevice &VK_Device::getHandle() {
     return handle;
+}
+
+VK_PhysicalDevice &VK_Device::getPhysicalDevice() {
+    return *physical_device;
 }
 
 

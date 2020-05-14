@@ -23,17 +23,20 @@ VK_Swapchain::VK_Swapchain(uint32_t width,
     image_count=details.capabilities.minImageCount+1;
     if(details.capabilities.maxImageCount>0&&image_count>details.capabilities.maxImageCount)
         image_count=details.capabilities.maxImageCount;
-    VkSurfaceFormatKHR surfaceFormat=chooseSwapSurfaceFormat(details.formats);
+    VkSurfaceFormatKHR surface_format=chooseSwapSurfaceFormat(details.formats);
     VkPresentModeKHR present_mode=chooseSwapPresentMode(details.present_modes);
     extent=chooseSwapExtent(details.capabilities);
-    format=surfaceFormat.format;
+    format=surface_format.format;
+
+
+
     VkSwapchainCreateInfoKHR create_info{};
     create_info.sType=VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     create_info.surface=surface_handle;
     create_info.imageExtent=extent;
     create_info.minImageCount=image_count;
     create_info.imageFormat=format;
-    create_info.imageColorSpace=surfaceFormat.colorSpace;
+    create_info.imageColorSpace=surface_format.colorSpace;
     create_info.imageArrayLayers=1;
     create_info.imageUsage=VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
@@ -65,17 +68,21 @@ VK_Swapchain::VK_Swapchain(uint32_t width,
     {
         Log::error("Failed to create swap chain!");
     }
-    vkGetSwapchainImagesKHR(device.getHandle(), handle, &image_count, swapchain_images.data());
-    swapchain_images.resize(image_count);
+
     vkGetSwapchainImagesKHR(device.getHandle(), handle, &image_count, nullptr);
+    swapchain_images.resize(image_count);
+    vkGetSwapchainImagesKHR(device.getHandle(), handle, &image_count, swapchain_images.data());
+    frame_buffers.resize(image_count);
 
-
+    createImageViews();
     Log::status(std::string("Created swapchain with extent:")+std::to_string(extent.width)+"x"+std::to_string(extent.height));
-
-
 }
 
+
 VK_Swapchain::~VK_Swapchain() {
+    for (auto framebuffer : frame_buffers) {
+        vkDestroyFramebuffer(device->getHandle(), framebuffer, nullptr);
+    }
     for (auto imageView : swapchain_image_views) {
         vkDestroyImageView(device->getHandle(), imageView, nullptr);
     }
@@ -146,6 +153,28 @@ VkSwapchainKHR &VK_Swapchain::getHandle() {
 VkFormat VK_Swapchain::getFormat() {
     return format;
 }
+
+void VK_Swapchain::createFramebuffers(VK_RenderPass &render_pass) {
+    frame_buffers.resize(swapchain_image_views.size());
+    for (int i = 0; i < swapchain_image_views.size(); ++i) {
+        VkImageView attachments[]={
+                swapchain_image_views[i]
+        };
+        VkFramebufferCreateInfo framebuffer_create_info{};
+        framebuffer_create_info.sType=VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebuffer_create_info.renderPass=render_pass.getHandle();
+        framebuffer_create_info.attachmentCount=1;
+        framebuffer_create_info.pAttachments=attachments;
+        framebuffer_create_info.width=extent.width;
+        framebuffer_create_info.height=extent.height;
+        framebuffer_create_info.layers=1;
+
+        if(vkCreateFramebuffer(device->getHandle(),&framebuffer_create_info, nullptr,&frame_buffers[i])!=VK_SUCCESS){
+            Log::error("Failed to create framebuffer!");
+        }
+    }
+}
+
 
 
 
