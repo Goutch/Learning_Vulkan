@@ -3,11 +3,18 @@
 //
 
 #include "VK_Device.h"
+#include "VK_Swapchain.h"
+#include "VK_RenderPass.h"
+#include "VK_CommandPool.h"
+#include "VK_GraphicPipeline.h"
+
 #include "Log.h"
 #include "vector"
 #include "set"
 
-VK_Device::VK_Device( VK_PhysicalDevice& physical_device) {
+
+VK_Device::VK_Device(VK_PhysicalDevice &physical_device, VkSurfaceKHR &surface_handle) {
+    this->surface_handle=&surface_handle;
     this->physical_device=&physical_device;
     QueueFamilyIndices indices=physical_device.getQueueFamilyIndices();
 
@@ -43,8 +50,34 @@ VK_Device::VK_Device( VK_PhysicalDevice& physical_device) {
     vkGetDeviceQueue(handle,indices.present_family.value(),0,&present_queue);
 
 }
+void VK_Device::createSwapchain(int width, int height) {
+    swapchain = new VK_Swapchain(static_cast<uint32_t >(width),
+                                 static_cast<uint32_t >(height),
+                                 *surface_handle,
+                                 *this);
+}
+void VK_Device::createRenderPass() {
+    renderPass = new VK_RenderPass(*this);
+}
+
+void VK_Device::createGraphicPipeline() {
+    pipeline = new VK_GraphicPipeline("../res/shader/shader_vert.spv",
+                                      "../res/shader/shader_frag.spv",
+                                      *this);
+}
+void VK_Device::createCommandPool() {
+    command_pool=new VK_CommandPool(*this);
+}
+
+void VK_Device::createFramebuffers() {
+    swapchain->createFramebuffers(*renderPass);
+}
 VK_Device::~VK_Device()
 {
+    delete command_pool;
+    delete pipeline;
+    delete renderPass;
+    delete swapchain;
     vkDestroyDevice(handle, nullptr);
     Log::status("Destroyed device");
 }
@@ -56,5 +89,24 @@ VkDevice &VK_Device::getHandle() {
 VK_PhysicalDevice &VK_Device::getPhysicalDevice() {
     return *physical_device;
 }
+
+VK_RenderPass &VK_Device::getRenderPass() {
+    return *renderPass;
+}
+
+VK_Swapchain &VK_Device::getSwapchain() {
+    return *swapchain;
+}
+
+VK_GraphicPipeline &VK_Device::getGraphicPipeline() {
+    return *pipeline;
+}
+
+
+
+
+
+
+
 
 

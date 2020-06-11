@@ -7,11 +7,11 @@
 #include "VK_Swapchain.h"
 #include "VK_Device.h"
 #include "Log.h"
-VK_RenderPass::VK_RenderPass(VK_Device& device,VK_Swapchain& swapchain) {
+VK_RenderPass::VK_RenderPass(VK_Device& device) {
     this->device=&device;
 
     VkAttachmentDescription  color_attachment{};
-    color_attachment.format=swapchain.getFormat();
+    color_attachment.format= device.getSwapchain().getFormat();
     color_attachment.samples=VK_SAMPLE_COUNT_1_BIT;
     color_attachment.loadOp=VK_ATTACHMENT_LOAD_OP_CLEAR;
     color_attachment.storeOp=VK_ATTACHMENT_STORE_OP_STORE;

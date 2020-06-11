@@ -13,23 +13,17 @@
 
 VK_Instance::VK_Instance(GLFWwindow *window) {
     this->window_handle = window;
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
     createInstance();
     createSurface();
     physical_device = new VK_PhysicalDevice(handle, surface_handle);
-    device = new VK_Device(*physical_device);
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-    swapchain = new VK_Swapchain(static_cast<uint32_t >(width),
-                                 static_cast<uint32_t >(height),
-                                 handle,
-                                 surface_handle,
-                                 *physical_device,
-                                 *device);
-    renderPass = new VK_RenderPass(*device, *swapchain);
-    pipeline = new VK_GraphicPipeline("../res/shader/shader_vert.spv",
-                                      "../res/shader/shader_frag.spv",
-                                      *device, *swapchain, *renderPass);
-    swapchain->createFramebuffers(*renderPass);
+    device = new VK_Device(*physical_device,surface_handle);
+    device->createSwapchain(width,height);
+    device->createRenderPass();
+    device->createGraphicPipeline();
+    device->createFramebuffers();
+    device->createCommandPool();
     Log::status("Vulkan instance initialized");
 }
 
@@ -121,9 +115,7 @@ bool VK_Instance::checkExtensionsSupport(std::vector<const char *> &required_ext
 
 
 VK_Instance::~VK_Instance() {
-    delete pipeline;
-    delete renderPass;
-    delete swapchain;
+
     delete device;
     delete physical_device;
     vkDestroySurfaceKHR(handle, surface_handle, nullptr);

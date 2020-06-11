@@ -12,10 +12,8 @@ class VK_GraphicPipeline {
 public:
     VK_GraphicPipeline(std::string vert_shader_path,
                        std::string frag_shader_path,
-                       VK_Device& device_handle,
-                       VK_Swapchain& swapchain,
-                       VK_RenderPass& render_pass);
-
+                       VK_Device& device);
+    VkPipeline& getHandle();
     ~VK_GraphicPipeline();
 };
 

@@ -24,9 +24,7 @@ class VK_Swapchain {
 public:
     VK_Swapchain(uint32_t width,
             uint32_t height,
-            const VkInstance &instance_handle,
             VkSurfaceKHR& surface_handle,
-            VK_PhysicalDevice& physical_device,
             VK_Device& device);
     ~VK_Swapchain();
     void createFramebuffers(VK_RenderPass& render_pass);
@@ -37,5 +35,6 @@ public:
     VkSwapchainKHR& getHandle();
     VkExtent2D getExtent();
     VkFormat getFormat();
+    std::vector<VkFramebuffer>& getFrameBuffers();
 
 };

@@ -17,9 +17,9 @@ class VK_Instance {
     VK_ValidationLayers* validation_layers= nullptr;
     VK_PhysicalDevice* physical_device= nullptr;
     VK_Device* device=nullptr;
-    VK_Swapchain* swapchain=nullptr;
-    VK_RenderPass* renderPass=nullptr;
-    VK_GraphicPipeline* pipeline=nullptr;
+
+
+
 public:
     VK_Instance(GLFWwindow* window);
     ~VK_Instance();

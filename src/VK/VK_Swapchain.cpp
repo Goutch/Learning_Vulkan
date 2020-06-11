@@ -9,17 +9,15 @@
 
 VK_Swapchain::VK_Swapchain(uint32_t width,
                            uint32_t height,
-                           const VkInstance &instance_handle,
                            VkSurfaceKHR &surface_handle,
-                           VK_PhysicalDevice& physical_device,
                            VK_Device& device) {
     this->width = width;
     this->height = height;
-    this->instance_handle = &instance_handle;
+
     this->surface_handle = &surface_handle;
-    this->physical_device = &physical_device;
+    this->physical_device = &device.getPhysicalDevice();
     this->device=&device;
-    SwapchainSupportDetails details = physical_device.getSwapchainSupportDetails();
+    SwapchainSupportDetails details = physical_device->getSwapchainSupportDetails();
     image_count=details.capabilities.minImageCount+1;
     if(details.capabilities.maxImageCount>0&&image_count>details.capabilities.maxImageCount)
         image_count=details.capabilities.maxImageCount;
@@ -41,7 +39,7 @@ VK_Swapchain::VK_Swapchain(uint32_t width,
     create_info.imageUsage=VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
 
-    QueueFamilyIndices indices =physical_device.getQueueFamilyIndices();
+    QueueFamilyIndices indices =physical_device->getQueueFamilyIndices();
 
     uint32_t queue_family_indices[]={
             indices.graphics_family.value(),
@@ -173,6 +171,10 @@ void VK_Swapchain::createFramebuffers(VK_RenderPass &render_pass) {
             Log::error("Failed to create framebuffer!");
         }
     }
+}
+
+std::vector<VkFramebuffer> &VK_Swapchain::getFrameBuffers() {
+    return frame_buffers;
 }
 
 

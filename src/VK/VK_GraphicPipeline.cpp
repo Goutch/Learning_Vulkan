@@ -10,9 +10,7 @@
 
 VK_GraphicPipeline::VK_GraphicPipeline(std::string vert_shader_path,
         std::string frag_shader_path,
-        VK_Device& device,
-        VK_Swapchain& swapchain,
-        VK_RenderPass& render_pass) {
+        VK_Device& device) {
     this->device=&device;
 
     VK_Shader vert_shader(device.getHandle(), vert_shader_path);
@@ -44,7 +42,7 @@ VK_GraphicPipeline::VK_GraphicPipeline(std::string vert_shader_path,
     input_assembly_state.primitiveRestartEnable = VK_FALSE;
 
 
-    VkExtent2D swapchain_extent=swapchain.getExtent();
+    VkExtent2D swapchain_extent=device.getSwapchain().getExtent();
     VkViewport viewport{};
     viewport.x = 0;
     viewport.y = 0;
@@ -150,7 +148,7 @@ VK_GraphicPipeline::VK_GraphicPipeline(std::string vert_shader_path,
     graphics_pipeline_create_info.pDynamicState= nullptr;
 
     graphics_pipeline_create_info.layout=layout_handle;
-    graphics_pipeline_create_info.renderPass=render_pass.getHandle();
+    graphics_pipeline_create_info.renderPass=device.getRenderPass().getHandle();
     graphics_pipeline_create_info.subpass=0;
     graphics_pipeline_create_info.basePipelineHandle=VK_NULL_HANDLE;
     graphics_pipeline_create_info.basePipelineIndex=-1;
@@ -168,4 +166,10 @@ VK_GraphicPipeline::~VK_GraphicPipeline() {
     vkDestroyPipeline(device->getHandle(),handle, nullptr);
     Log::status("Destroyed graphic pipeline");
 }
+
+VkPipeline &VK_GraphicPipeline::getHandle() {
+    return handle;
+}
+
+
 

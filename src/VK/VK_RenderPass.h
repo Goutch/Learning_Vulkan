@@ -6,7 +6,7 @@ class VK_RenderPass {
     VkRenderPass handle;
     VK_Device* device= nullptr;
 public:
-    VK_RenderPass(VK_Device& device,VK_Swapchain& swapchain);
+    VK_RenderPass(VK_Device& device);
     ~VK_RenderPass();
     VkRenderPass getHandle();
 };
