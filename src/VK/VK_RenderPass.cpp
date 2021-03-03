@@ -1,7 +1,3 @@
-//
-// Created by User on 2020-05-09.
-//
-
 #include "VK_RenderPass.h"
 #include "vulkan//vulkan.h"
 #include "VK_Swapchain.h"

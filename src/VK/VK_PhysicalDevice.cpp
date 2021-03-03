@@ -1,6 +1,3 @@
-//
-// Created by user on 4/25/20.
-//
 
 #include <vector>
 #include "VK_PhysicalDevice.h"

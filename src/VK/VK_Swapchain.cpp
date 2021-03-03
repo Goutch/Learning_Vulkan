@@ -1,7 +1,3 @@
-//
-// Created by user on 4/26/20.
-//
-
 #include "VK_Swapchain.h"
 #include "Log.h"
 #include <algorithm>

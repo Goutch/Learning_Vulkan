@@ -1,7 +1,3 @@
-//
-// Created by user on 4/30/20.
-//
-
 #include "VK_Shader.h"
 #include "Log.h"
 #include "fstream"

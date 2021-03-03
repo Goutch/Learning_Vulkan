@@ -1,6 +1,4 @@
-//
-// Created by user on 4/30/20.
-//
+
 
 #include "VK_GraphicPipeline.h"
 #include "Log.h"

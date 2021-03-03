@@ -1,6 +1,3 @@
-//
-// Created by User on 2020-05-13.
-//
 
 #include "VK_CommandPool.h"
 #include "VK_Device.h"

@@ -18,14 +18,14 @@ class VK_Instance {
     VK_PhysicalDevice* physical_device= nullptr;
     VK_Device* device=nullptr;
 
-
-
 public:
     VK_Instance(GLFWwindow* window);
     ~VK_Instance();
+
+private:
     void createInstance();
     void createSurface();
     void getRequiredExtensions( std::vector<const char*>& extensions);
-    bool checkExtensionsSupport(std::vector<const char*>& required_entension_names);
+    bool checkExtensionsSupport(std::vector<const char*>& required_extension_names);
 
 };

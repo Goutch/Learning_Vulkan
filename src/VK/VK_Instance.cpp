@@ -1,6 +1,4 @@
-//
-// Created by user on 4/24/20.
-//
+
 
 #include <vector>
 #include "VK_Instance.h"
